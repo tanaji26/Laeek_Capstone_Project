@@ -4,7 +4,3 @@ __pycache__/
 data/logs/
 bool
 str
-*.docx
-diet_plan.txt
-workout plan final.txt
-workout_routine.txt
