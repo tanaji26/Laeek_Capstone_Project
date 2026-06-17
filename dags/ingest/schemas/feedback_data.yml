@@ -1,0 +1,36 @@
+table_name: feedback_data
+description: "Customer feedback and review scores for delivered orders"
+primary_key: feedback_id
+source_file: feedback_data.csv
+iceberg_location: warehouse/landing/feedback_data/
+
+columns:
+  - name: feedback_id
+    dtype: string
+    nullable: false
+    pii: false
+    description: "Unique feedback identifier (format: FB-XXXXX)"
+ 
+  - name: order_id
+    dtype: string
+    nullable: false
+    pii: false
+    description: "Foreign key referencing orders_data.order_id — only delivered orders have feedback"
+ 
+  - name: review_date
+    dtype: date
+    nullable: false
+    pii: false
+    description: "Date the review was submitted — must be >= order delivery_date"
+ 
+  - name: product_review
+    dtype: string
+    nullable: true
+    pii: false
+    description: "Free-text review comment left by the customer"
+ 
+  - name: review_score
+    dtype: integer
+    nullable: false
+    pii: false
+    description: "Numeric rating given by the customer — valid range: 1 to 5"

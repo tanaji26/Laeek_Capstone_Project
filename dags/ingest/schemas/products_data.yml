@@ -1,0 +1,36 @@
+table_name: products_data
+description: "Product master data including category, cost, and retail pricing"
+primary_key: product_id
+source_file: products_data.csv
+iceberg_location: warehouse/landing/products_data/
+
+columns:
+  - name: product_id
+    dtype: string
+    nullable: false
+    pii: false
+    description: "Unique product identifier (format: PRD-XXX)"
+  
+  - name: product_name
+    dtype: string
+    nullable: false
+    pii: false
+    description: "Full descriptive name of the product"
+  
+  - name: product_category
+    dtype: string
+    nullable: false
+    pii: false
+    description: "Product category (Electronics / Apparel / Grocery / Furniture / Sports)"
+ 
+  - name: cost_price_per_unit
+    dtype: decimal
+    nullable: false
+    pii: false
+    description: "Cost price per unit in INR — must be > 0 and < retail_price_per_unit"
+ 
+  - name: retail_price_per_unit
+    dtype: decimal
+    nullable: false
+    pii: false
+    description: "Retail selling price per unit in INR — must be > cost_price_per_unit"

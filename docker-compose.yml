@@ -1,0 +1,226 @@
+services:
+
+  minio:
+    image: minio/minio:latest
+    container_name: minio
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: minio
+      MINIO_ROOT_PASSWORD: minio123
+    command: server /data --console-address ":9001"
+    volumes:
+      - minio_data:/data
+
+  mc:
+    image: minio/mc:latest
+    depends_on: [minio]
+    entrypoint:
+      - /bin/sh
+      - -c
+      - |
+        sleep 5
+        mc alias set local http://minio:9000 minio minio123
+        mc mb -p local/data || true
+        mc mb -p local/data/landing || true
+        mc mb -p local/data/bronze || true
+        mc mb -p local/data/bronze/quarantine || true
+        mc mb -p local/data/silver || true
+        mc mb -p local/data/gold || true
+        mc mb -p local/data/warehouse || true
+        echo "All buckets ready."
+        tail -f /dev/null
+
+  pg_source:
+    image: postgres:16
+    container_name: pg_source
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: source
+      POSTGRES_PASSWORD: source
+      POSTGRES_DB: retail
+    volumes:
+      - pg_source_data:/var/lib/postgresql/data
+      - ./docker/init/pg_source.sql:/docker-entrypoint-initdb.d/init.sql
+
+  mysql_source:
+    image: mysql:8
+    container_name: mysql_source
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: catalog
+      MYSQL_USER: source
+      MYSQL_PASSWORD: source
+    volumes:
+      - mysql_source_data:/var/lib/mysql
+      - ./docker/init/mysql_source.sql:/docker-entrypoint-initdb.d/init.sql
+
+  pg_catalog:
+    image: postgres:16
+    container_name: pg_catalog
+    ports:
+      - "5434:5432"
+    environment:
+      POSTGRES_USER: iceberg
+      POSTGRES_PASSWORD: iceberg
+      POSTGRES_DB: iceberg
+    volumes:
+      - pg_catalog_data:/var/lib/postgresql/data
+      - ./docker/init/pg_catalog.sql:/docker-entrypoint-initdb.d/init.sql
+
+  iceberg-rest:
+    image: tabulario/iceberg-rest:latest
+    container_name: iceberg-rest
+    ports:
+      - "8181:8181"
+    environment:
+      CATALOG_WAREHOUSE: s3://data/warehouse/
+      CATALOG_IO__IMPL: org.apache.iceberg.aws.s3.S3FileIO
+      CATALOG_S3_ENDPOINT: http://minio:9000
+      CATALOG_S3_ACCESS__KEY__ID: minio
+      CATALOG_S3_SECRET__ACCESS__KEY: minio123
+      CATALOG_S3_PATH__STYLE__ACCESS: "true"
+      AWS_REGION: us-east-1
+      CATALOG_CATALOG__IMPL: org.apache.iceberg.jdbc.JdbcCatalog
+      CATALOG_URI: jdbc:postgresql://pg_catalog:5432/iceberg
+      CATALOG_JDBC_USER: iceberg
+      CATALOG_JDBC_PASSWORD: iceberg
+    depends_on:
+      - minio
+      - pg_catalog
+
+  trino-coordinator:
+    image: trinodb/trino:438
+    container_name: trino-coordinator
+    ports:
+      - "13579:8080"
+    volumes:
+      - ./docker/trino/etc-coordinator:/etc/trino
+    depends_on:
+      - minio
+      - iceberg-rest
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/v1/info/state"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+      start_period: 60s
+
+  trino-worker:
+    image: trinodb/trino:438
+    container_name: trino-worker
+    depends_on:
+      trino-coordinator:
+        condition: service_healthy
+    volumes:
+      - ./docker/trino/etc-worker:/etc/trino
+    environment:
+      TRINO_NODE_ID: worker-1
+    entrypoint:
+      - /bin/sh
+      - -c
+      - |
+        cp -r /etc/trino /tmp/trino-etc
+        printf 'node.environment=docker\nnode.id=worker-1\nnode.data-dir=/data/trino\n' \
+          > /tmp/trino-etc/node.properties
+        exec /usr/lib/trino/bin/run-trino --etc-dir=/tmp/trino-etc
+
+  airflow-db:
+    image: postgres:15
+    container_name: airflow-db
+    environment:
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: airflow
+      POSTGRES_DB: airflow
+    healthcheck:                                          # ← ADDED
+      test: ["CMD", "pg_isready", "-U", "airflow"]
+      interval: 5s
+      retries: 10
+
+  airflow-init:
+    image: apache/airflow:2.9.0
+    depends_on:
+      airflow-db:
+        condition: service_healthy                        # ← waits for DB
+    environment:
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@airflow-db/airflow
+      AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+    command: >
+      bash -c "airflow db migrate && airflow users create
+      --username admin --password admin
+      --firstname Admin --lastname User
+      --role Admin --email admin@smartretail.com || true"
+    healthcheck:                                          # ← ADDED
+      test: ["CMD-SHELL", "airflow db check"]
+      interval: 10s
+      timeout: 10s
+      retries: 10
+      start_period: 30s
+
+  airflow-scheduler:
+    build:
+      context: ./dags/ingest
+      dockerfile: Dockerfile.airflow
+    container_name: airflow-scheduler
+    depends_on:
+      airflow-db:
+        condition: service_healthy
+      airflow-init:
+        condition: service_completed_successfully         # ← waits for migrate to finish
+      trino-coordinator:
+        condition: service_healthy
+      minio:
+        condition: service_started
+    env_file:
+      - .env                                             # ← ADDED (picks up OPENAI_API_KEY)
+    environment:
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@airflow-db/airflow
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+      MINIO_ENDPOINT: ${MINIO_ENDPOINT}
+      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY}
+      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY}
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      TRINO_HOST: trino-coordinator
+      SCHEMAS_DIR: /opt/airflow/dags/ingest/schemas
+      LOG_DIR: /data/logs
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./dags/ingest:/opt/airflow/dags/ingest
+      - ./data:/data
+    command: scheduler
+
+  airflow-webserver:
+    build:
+      context: ./dags/ingest
+      dockerfile: Dockerfile.airflow
+    container_name: airflow-webserver
+    depends_on:
+      airflow-db:
+        condition: service_healthy
+      airflow-init:
+        condition: service_completed_successfully         # ← waits for migrate to finish
+    environment:
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@airflow-db/airflow
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./dags/ingest:/opt/airflow/dags/ingest
+      - ./data:/data
+    ports:
+      - "8085:8080"
+    command: webserver
+
+  # airflow-worker REMOVED — LocalExecutor runs tasks inside the scheduler
+
+volumes:
+  minio_data:
+  pg_source_data:
+  mysql_source_data:
+  pg_catalog_data:
+  iceberg_catalog:

@@ -1,0 +1,75 @@
+table_name: customers_data
+description: "Customer master data including prime membership details"
+primary_key: customer_id
+source_file: customer_data.csv
+iceberg_location: warehouse/landing/customers_data/
+
+columns:
+  - name: customer_id
+    dtype: string
+    nullable: false
+    pii: false
+    description: "Unique customer identifier (format: Cust-XXXX)"
+ 
+  - name: customer_name
+    dtype: string
+    nullable: false
+    pii: true
+    pii_type: name
+    description: "Full name of the customer — PII: must be masked in non-production"
+ 
+  - name: customer_email
+    dtype: string
+    nullable: false
+    pii: true
+    pii_type: email
+    description: "Customer email address — PII: must be masked in non-production"
+ 
+  - name: customer_contact_no
+    dtype: string
+    nullable: false
+    pii: true
+    pii_type: phone
+    description: "Customer phone number — must be 10 digits starting with 7, 8, or 9. PII: sensitive"
+ 
+  - name: customer_location
+    dtype: string
+    nullable: true
+    pii: false
+    description: "City where the customer is located"
+ 
+  - name: customer_region
+    dtype: string
+    nullable: true
+    pii: false
+    description: "Geographic region (North / South / East / West / Central)"
+ 
+  - name: customer_age
+    dtype: integer
+    nullable: true
+    pii: false
+    description: "Age of the customer in years — expected range: 18–65"
+ 
+  - name: customer_gender
+    dtype: string
+    nullable: true
+    pii: false
+    description: "Gender of the customer (Male / Female / Other)"
+ 
+  - name: is_prime_customer
+    dtype: boolean
+    nullable: false
+    pii: false
+    description: "Whether the customer holds an active prime membership"
+ 
+  - name: prime_start_date
+    dtype: date
+    nullable: true
+    pii: false
+    description: "Start date of prime membership — null if not a prime customer"
+ 
+  - name: prime_end_date
+    dtype: date
+    nullable: true
+    pii: false
+    description: "End date of prime membership — must be > prime_start_date. Null if not a prime customer"

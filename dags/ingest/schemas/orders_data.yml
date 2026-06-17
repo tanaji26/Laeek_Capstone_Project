@@ -1,0 +1,126 @@
+table_name: orders_data
+description: "Retail orders placed by customers between 2024 and 2026"
+primary_key: order_id
+source_file: orders_data.csv
+iceberg_location: warehouse/landing/orders_data/
+
+columns:
+  - name: order_id
+    dtype: string
+    nullable: false
+    pii: false
+    description: "Unique order identifier (format: ORD-XXXXX)"
+
+  - name: product_id
+    dtype: string
+    nullable: false
+    pii: false
+    description: "Foreign key referencing products_data.product_id"
+
+  - name: customer_id
+    dtype: string
+    nullable: false
+    pii: false
+    description: "Foreign key referencing customers_data.customer_id"
+
+  - name: order_date
+    dtype: date
+    nullable: false
+    pii: false
+    description: "Date when the order was placed"
+
+  - name: customer_location
+    dtype: string
+    nullable: true
+    pii: false
+    description: "City of the customer at the time of order"
+
+  - name: customer_region
+    dtype: string
+    nullable: true
+    pii: false
+    description: "Geographic region of the customer (North/South/East/West/Central)"
+
+  - name: product_name
+    dtype: string
+    nullable: false
+    pii: false
+    description: "Name of the product ordered"
+
+  - name: product_category
+    dtype: string
+    nullable: false
+    pii: false
+    description: "Category of the product (Electronics/Apparel/Grocery/Furniture/Sports)"
+
+  - name: delivery_date
+    dtype: date
+    nullable: true
+    pii: false
+    description: "Expected or actual delivery date — must be >= order_date"
+
+  - name: order_status
+    dtype: string
+    nullable: false
+    pii: false
+    description: "Current order status (Delivered / Cancelled / Returned)"
+
+  - name: order_qty
+    dtype: integer
+    nullable: false
+    pii: false
+    description: "Number of units ordered — must be >= 1"
+
+  - name: unit_price
+    dtype: decimal
+    nullable: false
+    pii: false
+    description: "Retail price per unit in INR — must be > 0"
+
+  - name: unit_price_tax
+    dtype: decimal
+    nullable: false
+    pii: false
+    description: "Tax amount per unit (18% of unit_price)"
+
+  - name: total_amount
+    dtype: decimal
+    nullable: false
+    pii: false
+    description: "Gross order value before discount (unit_price * order_qty)"
+
+  - name: discount_pct
+    dtype: decimal
+    nullable: false
+    pii: false
+    description: "Discount percentage applied — prime customers: 0.08–0.15, non-prime: 0.02–0.07"
+
+  - name: total_discount
+    dtype: decimal
+    nullable: false
+    pii: false
+    description: "Discount amount in INR (total_amount * discount_pct)"
+
+  - name: final_amount
+    dtype: decimal
+    nullable: false
+    pii: false
+    description: "Net payable amount after discount (total_amount - total_discount) — must be >= 0"
+
+  - name: currency
+    dtype: string
+    nullable: false
+    pii: false
+    description: "Currency code — always INR"
+
+  - name: payment_method
+    dtype: string
+    nullable: false
+    pii: false
+    description: "Payment method used (UPI / Cash on Delivery / Credit Card / Debit Card / Net Banking / EMI)"
+
+  - name: payment_status
+    dtype: string
+    nullable: false
+    pii: false
+    description: "Payment status (Paid / Refunded)"
