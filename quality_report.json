@@ -1,0 +1,511 @@
+{
+  "agent": "quality_agent",
+  "ts": "2026-06-10T14:29:26.062347+00:00",
+  "overall_score": 100.0,
+  "tables": [
+    {
+      "table": "products_data",
+      "rows_validated": 50,
+      "dq_score": 100.0,
+      "total_checks": 9,
+      "failed_checks": 0,
+      "bad_rows": 0,
+      "quarantine_path": "",
+      "checks": [
+        {
+          "check": "null_check::product_id",
+          "passed": true,
+          "rows_failed": 0,
+          "total_rows": 50,
+          "fail_rate": 0.0,
+          "detail": "Column 'product_id' must not be null"
+        },
+        {
+          "check": "null_check::product_name",
+          "passed": true,
+          "rows_failed": 0,
+          "total_rows": 50,
+          "fail_rate": 0.0,
+          "detail": "Column 'product_name' must not be null"
+        },
+        {
+          "check": "null_check::product_category",
+          "passed": true,
+          "rows_failed": 0,
+          "total_rows": 50,
+          "fail_rate": 0.0,
+          "detail": "Column 'product_category' must not be null"
+        },
+        {
+          "check": "null_check::cost_price_per_unit",
+          "passed": true,
+          "rows_failed": 0,
+          "total_rows": 50,
+          "fail_rate": 0.0,
+          "detail": "Column 'cost_price_per_unit' must not be null"
+        },
+        {
+          "check": "null_check::retail_price_per_unit",
+          "passed": true,
+          "rows_failed": 0,
+          "total_rows": 50,
+          "fail_rate": 0.0,
+          "detail": "Column 'retail_price_per_unit' must not be null"
+        },
+        {
+          "check": "pk_unique::product_id",
+          "passed": true,
+          "rows_failed": 0,
+          "total_rows": 50,
+          "fail_rate": 0.0,
+          "detail": "Primary key 'product_id' must be unique"
+        },
+        {
+          "check": "enum_check::product_category",
+          "passed": true,
+          "rows_failed": 0,
+          "total_rows": 50,
+          "fail_rate": 0.0,
+          "detail": "Column 'product_category' must be one of ['Apparel', 'Electronics', 'Furniture', 'Grocery', 'Sports']"
+        },
+        {
+          "check": "range_check::cost_price_per_unit",
+          "passed": true,
+          "rows_failed": 0,
+          "total_rows": 50,
+          "fail_rate": 0.0,
+          "detail": "Column 'cost_price_per_unit' failed range constraint"
+        },
+        {
+          "check": "range_check::retail_price_per_unit",
+          "passed": true,
+          "rows_failed": 0,
+          "total_rows": 50,
+          "fail_rate": 0.0,
+          "detail": "Column 'retail_price_per_unit' failed range constraint"
+        }
+      ],
+      "ts": "2026-06-10T14:29:25.878253+00:00"
+    },
+    {
+      "table": "customers_data",
+      "rows_validated": 200,
+      "dq_score": 100.0,
+      "total_checks": 10,
+      "failed_checks": 0,
+      "bad_rows": 0,
+      "quarantine_path": "",
+      "checks": [
+        {
+          "check": "null_check::customer_id",
+          "passed": true,
+          "rows_failed": 0,
+          "total_rows": 200,
+          "fail_rate": 0.0,
+          "detail": "Column 'customer_id' must not be null"
+        },
+        {
+          "check": "null_check::customer_name",
+          "passed": true,
+          "rows_failed": 0,
+          "total_rows": 200,
+          "fail_rate": 0.0,
+          "detail": "Column 'customer_name' must not be null"
+        },
+        {
+          "check": "null_check::customer_email",
+          "passed": true,
+          "rows_failed": 0,
+          "total_rows": 200,
+          "fail_rate": 0.0,
+          "detail": "Column 'customer_email' must not be null"
+        },
+        {
+          "check": "null_check::customer_contact_no",
+          "passed": true,
+          "rows_failed": 0,
+          "total_rows": 200,
+          "fail_rate": 0.0,
+          "detail": "Column 'customer_contact_no' must not be null"
+        },
+        {
+          "check": "null_check::is_prime_customer",
+          "passed": true,
+          "rows_failed": 0,
+          "total_rows": 200,
+          "fail_rate": 0.0,
+          "detail": "Column 'is_prime_customer' must not be null"
+        },
+        {
+          "check": "pk_unique::customer_id",
+          "passed": true,
+          "rows_failed": 0,
+          "total_rows": 200,
+          "fail_rate": 0.0,
+          "detail": "Primary key 'customer_id' must be unique"
+        },
+        {
+          "check": "enum_check::customer_region",
+          "passed": true,
+          "rows_failed": 0,
+          "total_rows": 200,
+          "fail_rate": 0.0,
+          "detail": "Column 'customer_region' must be one of ['Central', 'East', 'North', 'South', 'West']"
+        },
+        {
+          "check": "enum_check::customer_gender",
+          "passed": true,
+          "rows_failed": 0,
+          "total_rows": 200,
+          "fail_rate": 0.0,
+          "detail": "Column 'customer_gender' must be one of ['Female', 'Male', 'Other']"
+        },
+        {
+          "check": "range_check::customer_age",
+          "passed": true,
+          "rows_failed": 0,
+          "total_rows": 200,
+          "fail_rate": 0.0,
+          "detail": "Column 'customer_age' failed range constraint"
+        },
+        {
+          "check": "date_logic::prime_end>prime_start",
+          "passed": true,
+          "rows_failed": 0,
+          "total_rows": 200,
+          "fail_rate": 0.0,
+          "detail": "prime_end_date must be > prime_start_date"
+        }
+      ],
+      "ts": "2026-06-10T14:29:25.914893+00:00"
+    },
+    {
+      "table": "orders_data",
+      "rows_validated": 10000,
+      "dq_score": 100.0,
+      "total_checks": 31,
+      "failed_checks": 0,
+      "bad_rows": 0,
+      "quarantine_path": "",
+      "checks": [
+        {
+          "check": "null_check::order_id",
+          "passed": true,
+          "rows_failed": 0,
+          "total_rows": 10000,
+          "fail_rate": 0.0,
+          "detail": "Column 'order_id' must not be null"
+        },
+        {
+          "check": "null_check::product_id",
+          "passed": true,
+          "rows_failed": 0,
+          "total_rows": 10000,
+          "fail_rate": 0.0,
+          "detail": "Column 'product_id' must not be null"
+        },
+        {
+          "check": "null_check::customer_id",
+          "passed": true,
+          "rows_failed": 0,
+          "total_rows": 10000,
+          "fail_rate": 0.0,
+          "detail": "Column 'customer_id' must not be null"
+        },
+        {
+          "check": "null_check::order_date",
+          "passed": true,
+          "rows_failed": 0,
+          "total_rows": 10000,
+          "fail_rate": 0.0,
+          "detail": "Column 'order_date' must not be null"
+        },
+        {
+          "check": "null_check::product_name",
+          "passed": true,
+          "rows_failed": 0,
+          "total_rows": 10000,
+          "fail_rate": 0.0,
+          "detail": "Column 'product_name' must not be null"
+        },
+        {
+          "check": "null_check::product_category",
+          "passed": true,
+          "rows_failed": 0,
+          "total_rows": 10000,
+          "fail_rate": 0.0,
+          "detail": "Column 'product_category' must not be null"
+        },
+        {
+          "check": "null_check::order_status",
+          "passed": true,
+          "rows_failed": 0,
+          "total_rows": 10000,
+          "fail_rate": 0.0,
+          "detail": "Column 'order_status' must not be null"
+        },
+        {
+          "check": "null_check::order_qty",
+          "passed": true,
+          "rows_failed": 0,
+          "total_rows": 10000,
+          "fail_rate": 0.0,
+          "detail": "Column 'order_qty' must not be null"
+        },
+        {
+          "check": "null_check::unit_price",
+          "passed": true,
+          "rows_failed": 0,
+          "total_rows": 10000,
+          "fail_rate": 0.0,
+          "detail": "Column 'unit_price' must not be null"
+        },
+        {
+          "check": "null_check::unit_price_tax",
+          "passed": true,
+          "rows_failed": 0,
+          "total_rows": 10000,
+          "fail_rate": 0.0,
+          "detail": "Column 'unit_price_tax' must not be null"
+        },
+        {
+          "check": "null_check::total_amount",
+          "passed": true,
+          "rows_failed": 0,
+          "total_rows": 10000,
+          "fail_rate": 0.0,
+          "detail": "Column 'total_amount' must not be null"
+        },
+        {
+          "check": "null_check::discount_pct",
+          "passed": true,
+          "rows_failed": 0,
+          "total_rows": 10000,
+          "fail_rate": 0.0,
+          "detail": "Column 'discount_pct' must not be null"
+        },
+        {
+          "check": "null_check::total_discount",
+          "passed": true,
+          "rows_failed": 0,
+          "total_rows": 10000,
+          "fail_rate": 0.0,
+          "detail": "Column 'total_discount' must not be null"
+        },
+        {
+          "check": "null_check::final_amount",
+          "passed": true,
+          "rows_failed": 0,
+          "total_rows": 10000,
+          "fail_rate": 0.0,
+          "detail": "Column 'final_amount' must not be null"
+        },
+        {
+          "check": "null_check::currency",
+          "passed": true,
+          "rows_failed": 0,
+          "total_rows": 10000,
+          "fail_rate": 0.0,
+          "detail": "Column 'currency' must not be null"
+        },
+        {
+          "check": "null_check::payment_method",
+          "passed": true,
+          "rows_failed": 0,
+          "total_rows": 10000,
+          "fail_rate": 0.0,
+          "detail": "Column 'payment_method' must not be null"
+        },
+        {
+          "check": "null_check::payment_status",
+          "passed": true,
+          "rows_failed": 0,
+          "total_rows": 10000,
+          "fail_rate": 0.0,
+          "detail": "Column 'payment_status' must not be null"
+        },
+        {
+          "check": "pk_unique::order_id",
+          "passed": true,
+          "rows_failed": 0,
+          "total_rows": 10000,
+          "fail_rate": 0.0,
+          "detail": "Primary key 'order_id' must be unique"
+        },
+        {
+          "check": "enum_check::order_status",
+          "passed": true,
+          "rows_failed": 0,
+          "total_rows": 10000,
+          "fail_rate": 0.0,
+          "detail": "Column 'order_status' must be one of ['Cancelled', 'Delivered', 'Returned']"
+        },
+        {
+          "check": "enum_check::payment_method",
+          "passed": true,
+          "rows_failed": 0,
+          "total_rows": 10000,
+          "fail_rate": 0.0,
+          "detail": "Column 'payment_method' must be one of ['Cash on Delivery', 'Credit Card', 'Debit Card', 'EMI', 'Net Banking', 'UPI']"
+        },
+        {
+          "check": "enum_check::payment_status",
+          "passed": true,
+          "rows_failed": 0,
+          "total_rows": 10000,
+          "fail_rate": 0.0,
+          "detail": "Column 'payment_status' must be one of ['Paid', 'Refunded']"
+        },
+        {
+          "check": "enum_check::customer_region",
+          "passed": true,
+          "rows_failed": 0,
+          "total_rows": 10000,
+          "fail_rate": 0.0,
+          "detail": "Column 'customer_region' must be one of ['Central', 'East', 'North', 'South', 'West']"
+        },
+        {
+          "check": "enum_check::product_category",
+          "passed": true,
+          "rows_failed": 0,
+          "total_rows": 10000,
+          "fail_rate": 0.0,
+          "detail": "Column 'product_category' must be one of ['Apparel', 'Electronics', 'Furniture', 'Grocery', 'Sports']"
+        },
+        {
+          "check": "enum_check::currency",
+          "passed": true,
+          "rows_failed": 0,
+          "total_rows": 10000,
+          "fail_rate": 0.0,
+          "detail": "Column 'currency' must be one of ['INR']"
+        },
+        {
+          "check": "range_check::order_qty",
+          "passed": true,
+          "rows_failed": 0,
+          "total_rows": 10000,
+          "fail_rate": 0.0,
+          "detail": "Column 'order_qty' failed range constraint"
+        },
+        {
+          "check": "range_check::unit_price",
+          "passed": true,
+          "rows_failed": 0,
+          "total_rows": 10000,
+          "fail_rate": 0.0,
+          "detail": "Column 'unit_price' failed range constraint"
+        },
+        {
+          "check": "range_check::final_amount",
+          "passed": true,
+          "rows_failed": 0,
+          "total_rows": 10000,
+          "fail_rate": 0.0,
+          "detail": "Column 'final_amount' failed range constraint"
+        },
+        {
+          "check": "range_check::discount_pct",
+          "passed": true,
+          "rows_failed": 0,
+          "total_rows": 10000,
+          "fail_rate": 0.0,
+          "detail": "Column 'discount_pct' failed range constraint"
+        },
+        {
+          "check": "date_logic::delivery>=order",
+          "passed": true,
+          "rows_failed": 0,
+          "total_rows": 10000,
+          "fail_rate": 0.0,
+          "detail": "delivery_date must be >= order_date"
+        },
+        {
+          "check": "fk_check::orders\u2192products",
+          "passed": true,
+          "rows_failed": 0,
+          "total_rows": 10000,
+          "fail_rate": 0.0,
+          "detail": "'product_id' references missing values in parent 'product_id'"
+        },
+        {
+          "check": "fk_check::orders\u2192customers",
+          "passed": true,
+          "rows_failed": 0,
+          "total_rows": 10000,
+          "fail_rate": 0.0,
+          "detail": "'customer_id' references missing values in parent 'customer_id'"
+        }
+      ],
+      "ts": "2026-06-10T14:29:25.996768+00:00"
+    },
+    {
+      "table": "feedback_data",
+      "rows_validated": 5625,
+      "dq_score": 100.0,
+      "total_checks": 7,
+      "failed_checks": 0,
+      "bad_rows": 0,
+      "quarantine_path": "",
+      "checks": [
+        {
+          "check": "null_check::feedback_id",
+          "passed": true,
+          "rows_failed": 0,
+          "total_rows": 5625,
+          "fail_rate": 0.0,
+          "detail": "Column 'feedback_id' must not be null"
+        },
+        {
+          "check": "null_check::order_id",
+          "passed": true,
+          "rows_failed": 0,
+          "total_rows": 5625,
+          "fail_rate": 0.0,
+          "detail": "Column 'order_id' must not be null"
+        },
+        {
+          "check": "null_check::review_date",
+          "passed": true,
+          "rows_failed": 0,
+          "total_rows": 5625,
+          "fail_rate": 0.0,
+          "detail": "Column 'review_date' must not be null"
+        },
+        {
+          "check": "null_check::review_score",
+          "passed": true,
+          "rows_failed": 0,
+          "total_rows": 5625,
+          "fail_rate": 0.0,
+          "detail": "Column 'review_score' must not be null"
+        },
+        {
+          "check": "pk_unique::feedback_id",
+          "passed": true,
+          "rows_failed": 0,
+          "total_rows": 5625,
+          "fail_rate": 0.0,
+          "detail": "Primary key 'feedback_id' must be unique"
+        },
+        {
+          "check": "range_check::review_score",
+          "passed": true,
+          "rows_failed": 0,
+          "total_rows": 5625,
+          "fail_rate": 0.0,
+          "detail": "Column 'review_score' failed range constraint"
+        },
+        {
+          "check": "fk_check::feedback\u2192orders",
+          "passed": true,
+          "rows_failed": 0,
+          "total_rows": 5625,
+          "fail_rate": 0.0,
+          "detail": "'order_id' references missing values in parent 'order_id'"
+        }
+      ],
+      "ts": "2026-06-10T14:29:26.050399+00:00"
+    }
+  ]
+}

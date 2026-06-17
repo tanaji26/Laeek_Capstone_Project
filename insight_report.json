@@ -1,0 +1,100 @@
+{
+  "agent": "insight_agent",
+  "ts": "2026-06-10T14:34:41.454249+00:00",
+  "model": "gpt-4o",
+  "metrics": {
+    "total_orders": 10000,
+    "delivered_orders": 8036,
+    "cancelled_orders": 1189,
+    "returned_orders": 775,
+    "cancellation_rate_pct": 11.89,
+    "return_rate_pct": 7.75,
+    "total_gmv_inr": 200308701.6,
+    "total_revenue_inr": 157562821.74,
+    "total_discount_inr": 11240874.4,
+    "avg_order_value_inr": 19607.12,
+    "order_status_dist": {
+      "Delivered": 8036,
+      "Cancelled": 1189,
+      "Returned": 775
+    },
+    "top_5_products": [
+      {
+        "product_name": "Lenovo IdeaPad Gaming 3",
+        "product_category": "Electronics",
+        "final_amount": 36337154.4
+      },
+      {
+        "product_name": "HP 15s Intel Core i3 Laptop",
+        "product_category": "Electronics",
+        "final_amount": 21065667.7
+      },
+      {
+        "product_name": "Canon EOS 1500D DSLR Camera",
+        "product_category": "Electronics",
+        "final_amount": 19994239.45
+      },
+      {
+        "product_name": "Mi 43-inch Smart TV 4X",
+        "product_category": "Electronics",
+        "final_amount": 13555416.38
+      },
+      {
+        "product_name": "Sony WH-1000XM5 Headphones",
+        "product_category": "Electronics",
+        "final_amount": 12946982.9
+      }
+    ],
+    "category_revenue": {
+      "Electronics": 123507093.83,
+      "Furniture": 15770776.11,
+      "Apparel": 10680362.08,
+      "Sports": 6010388.41,
+      "Grocery": 1594201.31
+    },
+    "prime_revenue_inr": 17670167.18,
+    "non_prime_revenue_inr": 139892654.56,
+    "regional_revenue": {
+      "North": 38639460.75,
+      "West": 37122243.93,
+      "East": 33945888.65,
+      "South": 25619750.3,
+      "Central": 22235478.11
+    },
+    "payment_method_split": {
+      "UPI": 4445,
+      "Credit Card": 1616,
+      "Cash on Delivery": 1447,
+      "Debit Card": 1416,
+      "Net Banking": 662,
+      "EMI": 414
+    },
+    "avg_review_score": 3.82,
+    "review_score_dist": {
+      "1": 314,
+      "2": 574,
+      "3": 1213,
+      "4": 1209,
+      "5": 2315
+    },
+    "low_reviews_count": 888,
+    "high_reviews_count": 3524,
+    "monthly_revenue_trend": {
+      "2024-01": 5571028.58,
+      "2024-02": 6574947.9,
+      "2024-03": 4681561.68,
+      "2024-04": 5018585.9,
+      "2024-05": 7454364.03,
+      "2024-06": 5846174.18
+    },
+    "total_customers": 200,
+    "prime_customers": 77,
+    "total_products": 50
+  },
+  "insights": {
+    "executive_summary": "[OpenAI error: Invalid API key]",
+    "product_insights": "[OpenAI error: Invalid API key]",
+    "customer_insights": "[OpenAI error: Invalid API key]",
+    "risk_flags": "[OpenAI error: Invalid API key]"
+  }
+}

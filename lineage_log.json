@@ -1,0 +1,796 @@
+[
+  {
+    "agent": "generate_data",
+    "run_id": "manual__2026-06-10T12:12:07+00:00",
+    "timestamp": "2026-06-10T12:17:40.397317+00:00",
+    "inputs": [
+      "synthetic_seed=42"
+    ],
+    "outputs": [
+      "/data/orders_data.csv",
+      "/data/customers_data.csv",
+      "/data/products_data.csv",
+      "/data/feedback_data.csv"
+    ],
+    "rows_in": 0,
+    "rows_out": 15875,
+    "status": "success",
+    "notes": "Synthetic Indian e-commerce data generated with fixed seed"
+  },
+  {
+    "agent": "ingest_to_minio",
+    "run_id": "manual__2026-06-10T12:12:07+00:00",
+    "timestamp": "2026-06-10T12:17:45.171345+00:00",
+    "inputs": [
+      "/data/orders_data.csv",
+      "/data/customers_data.csv",
+      "/data/products_data.csv",
+      "/data/feedback_data.csv"
+    ],
+    "outputs": [
+      "s3://data/bronze/orders_data.parquet",
+      "s3://data/bronze/customers_data.parquet",
+      "s3://data/bronze/products_data.parquet",
+      "s3://data/bronze/feedback_data.parquet"
+    ],
+    "rows_in": 15875,
+    "rows_out": 15875,
+    "status": "success",
+    "notes": "CSV \u2192 Parquet conversion, landed in MinIO Bronze zone"
+  },
+  {
+    "agent": "governance_agent",
+    "run_id": "manual__2026-06-10T12:12:07+00:00",
+    "timestamp": "2026-06-10T12:17:49.121563+00:00",
+    "inputs": [
+      "s3://data/bronze/orders_data.parquet",
+      "s3://data/bronze/customers_data.parquet",
+      "s3://data/bronze/products_data.parquet",
+      "s3://data/bronze/feedback_data.parquet"
+    ],
+    "outputs": [
+      "s3://data/silver/orders_enriched.parquet",
+      "s3://data/silver/customers_clean.parquet",
+      "s3://data/silver/products_clean.parquet",
+      "s3://data/silver/feedback_enriched.parquet"
+    ],
+    "rows_in": 15875,
+    "rows_out": 15875,
+    "status": "success",
+    "notes": "Schema enforcement, PII masking, join enrichment, discount/AOV derivation"
+  },
+  {
+    "agent": "quality_agent",
+    "run_id": "manual__2026-06-10T12:12:07+00:00",
+    "timestamp": "2026-06-10T12:17:51.467671+00:00",
+    "inputs": [
+      "s3://data/silver/orders_enriched.parquet",
+      "s3://data/silver/customers_clean.parquet",
+      "s3://data/silver/products_clean.parquet",
+      "s3://data/silver/feedback_enriched.parquet"
+    ],
+    "outputs": [
+      "/data/logs/quality_report.json"
+    ],
+    "rows_in": 15875,
+    "rows_out": 0,
+    "status": "success",
+    "notes": "31 DQ checks: nulls, ranges, referential integrity, duplicates, business rules"
+  },
+  {
+    "agent": "generate_data",
+    "run_id": "scheduled__2026-06-09T06:00:00+00:00",
+    "timestamp": "2026-06-10T12:24:42.125419+00:00",
+    "inputs": [
+      "synthetic_seed=42"
+    ],
+    "outputs": [
+      "/data/orders_data.csv",
+      "/data/customers_data.csv",
+      "/data/products_data.csv",
+      "/data/feedback_data.csv"
+    ],
+    "rows_in": 0,
+    "rows_out": 15875,
+    "status": "success",
+    "notes": "Synthetic Indian e-commerce data generated with fixed seed"
+  },
+  {
+    "agent": "ingest_to_minio",
+    "run_id": "scheduled__2026-06-09T06:00:00+00:00",
+    "timestamp": "2026-06-10T12:24:44.498589+00:00",
+    "inputs": [
+      "/data/orders_data.csv",
+      "/data/customers_data.csv",
+      "/data/products_data.csv",
+      "/data/feedback_data.csv"
+    ],
+    "outputs": [
+      "s3://data/bronze/orders_data.parquet",
+      "s3://data/bronze/customers_data.parquet",
+      "s3://data/bronze/products_data.parquet",
+      "s3://data/bronze/feedback_data.parquet"
+    ],
+    "rows_in": 15875,
+    "rows_out": 15875,
+    "status": "success",
+    "notes": "CSV \u2192 Parquet conversion, landed in MinIO Bronze zone"
+  },
+  {
+    "agent": "governance_agent",
+    "run_id": "scheduled__2026-06-09T06:00:00+00:00",
+    "timestamp": "2026-06-10T12:24:48.623280+00:00",
+    "inputs": [
+      "s3://data/bronze/orders_data.parquet",
+      "s3://data/bronze/customers_data.parquet",
+      "s3://data/bronze/products_data.parquet",
+      "s3://data/bronze/feedback_data.parquet"
+    ],
+    "outputs": [
+      "s3://data/silver/orders_enriched.parquet",
+      "s3://data/silver/customers_clean.parquet",
+      "s3://data/silver/products_clean.parquet",
+      "s3://data/silver/feedback_enriched.parquet"
+    ],
+    "rows_in": 15875,
+    "rows_out": 15875,
+    "status": "success",
+    "notes": "Schema enforcement, PII masking, join enrichment, discount/AOV derivation"
+  },
+  {
+    "agent": "quality_agent",
+    "run_id": "scheduled__2026-06-09T06:00:00+00:00",
+    "timestamp": "2026-06-10T12:24:51.325791+00:00",
+    "inputs": [
+      "s3://data/silver/orders_enriched.parquet",
+      "s3://data/silver/customers_clean.parquet",
+      "s3://data/silver/products_clean.parquet",
+      "s3://data/silver/feedback_enriched.parquet"
+    ],
+    "outputs": [
+      "/data/logs/quality_report.json"
+    ],
+    "rows_in": 15875,
+    "rows_out": 0,
+    "status": "success",
+    "notes": "31 DQ checks: nulls, ranges, referential integrity, duplicates, business rules"
+  },
+  {
+    "agent": "generate_data",
+    "run_id": "scheduled__2026-06-09T06:00:00+00:00",
+    "timestamp": "2026-06-10T12:42:58.040057+00:00",
+    "inputs": [
+      "synthetic_seed=42"
+    ],
+    "outputs": [
+      "/data/orders_data.csv",
+      "/data/customers_data.csv",
+      "/data/products_data.csv",
+      "/data/feedback_data.csv"
+    ],
+    "rows_in": 0,
+    "rows_out": 15875,
+    "status": "success",
+    "notes": "Synthetic Indian e-commerce data generated with fixed seed"
+  },
+  {
+    "agent": "ingest_to_minio",
+    "run_id": "scheduled__2026-06-09T06:00:00+00:00",
+    "timestamp": "2026-06-10T12:43:06.813851+00:00",
+    "inputs": [
+      "/data/orders_data.csv",
+      "/data/customers_data.csv",
+      "/data/products_data.csv",
+      "/data/feedback_data.csv"
+    ],
+    "outputs": [
+      "s3://data/bronze/orders_data.parquet",
+      "s3://data/bronze/customers_data.parquet",
+      "s3://data/bronze/products_data.parquet",
+      "s3://data/bronze/feedback_data.parquet"
+    ],
+    "rows_in": 15875,
+    "rows_out": 15875,
+    "status": "success",
+    "notes": "CSV \u2192 Parquet conversion, landed in MinIO Bronze zone"
+  },
+  {
+    "agent": "governance_agent",
+    "run_id": "scheduled__2026-06-09T06:00:00+00:00",
+    "timestamp": "2026-06-10T12:43:11.740972+00:00",
+    "inputs": [
+      "s3://data/bronze/orders_data.parquet",
+      "s3://data/bronze/customers_data.parquet",
+      "s3://data/bronze/products_data.parquet",
+      "s3://data/bronze/feedback_data.parquet"
+    ],
+    "outputs": [
+      "s3://data/silver/orders_enriched.parquet",
+      "s3://data/silver/customers_clean.parquet",
+      "s3://data/silver/products_clean.parquet",
+      "s3://data/silver/feedback_enriched.parquet"
+    ],
+    "rows_in": 15875,
+    "rows_out": 15875,
+    "status": "success",
+    "notes": "Schema enforcement, PII masking, join enrichment, discount/AOV derivation"
+  },
+  {
+    "agent": "quality_agent",
+    "run_id": "scheduled__2026-06-09T06:00:00+00:00",
+    "timestamp": "2026-06-10T12:43:15.635416+00:00",
+    "inputs": [
+      "s3://data/silver/orders_enriched.parquet",
+      "s3://data/silver/customers_clean.parquet",
+      "s3://data/silver/products_clean.parquet",
+      "s3://data/silver/feedback_enriched.parquet"
+    ],
+    "outputs": [
+      "/data/logs/quality_report.json"
+    ],
+    "rows_in": 15875,
+    "rows_out": 0,
+    "status": "success",
+    "notes": "31 DQ checks: nulls, ranges, referential integrity, duplicates, business rules"
+  },
+  {
+    "agent": "generate_data",
+    "run_id": "manual__2026-06-10T12:43:05+00:00",
+    "timestamp": "2026-06-10T12:50:15.921029+00:00",
+    "inputs": [
+      "synthetic_seed=42"
+    ],
+    "outputs": [
+      "/data/orders_data.csv",
+      "/data/customers_data.csv",
+      "/data/products_data.csv",
+      "/data/feedback_data.csv"
+    ],
+    "rows_in": 0,
+    "rows_out": 15875,
+    "status": "success",
+    "notes": "Synthetic Indian e-commerce data generated with fixed seed"
+  },
+  {
+    "agent": "ingest_to_minio",
+    "run_id": "manual__2026-06-10T12:43:05+00:00",
+    "timestamp": "2026-06-10T12:50:18.561898+00:00",
+    "inputs": [
+      "/data/orders_data.csv",
+      "/data/customers_data.csv",
+      "/data/products_data.csv",
+      "/data/feedback_data.csv"
+    ],
+    "outputs": [
+      "s3://data/bronze/orders_data.parquet",
+      "s3://data/bronze/customers_data.parquet",
+      "s3://data/bronze/products_data.parquet",
+      "s3://data/bronze/feedback_data.parquet"
+    ],
+    "rows_in": 15875,
+    "rows_out": 15875,
+    "status": "success",
+    "notes": "CSV \u2192 Parquet conversion, landed in MinIO Bronze zone"
+  },
+  {
+    "agent": "governance_agent",
+    "run_id": "manual__2026-06-10T12:43:05+00:00",
+    "timestamp": "2026-06-10T12:50:22.935017+00:00",
+    "inputs": [
+      "s3://data/bronze/orders_data.parquet",
+      "s3://data/bronze/customers_data.parquet",
+      "s3://data/bronze/products_data.parquet",
+      "s3://data/bronze/feedback_data.parquet"
+    ],
+    "outputs": [
+      "s3://data/silver/orders_enriched.parquet",
+      "s3://data/silver/customers_clean.parquet",
+      "s3://data/silver/products_clean.parquet",
+      "s3://data/silver/feedback_enriched.parquet"
+    ],
+    "rows_in": 15875,
+    "rows_out": 15875,
+    "status": "success",
+    "notes": "Schema enforcement, PII masking, join enrichment, discount/AOV derivation"
+  },
+  {
+    "agent": "quality_agent",
+    "run_id": "manual__2026-06-10T12:43:05+00:00",
+    "timestamp": "2026-06-10T12:50:26.115825+00:00",
+    "inputs": [
+      "s3://data/silver/orders_enriched.parquet",
+      "s3://data/silver/customers_clean.parquet",
+      "s3://data/silver/products_clean.parquet",
+      "s3://data/silver/feedback_enriched.parquet"
+    ],
+    "outputs": [
+      "/data/logs/quality_report.json"
+    ],
+    "rows_in": 15875,
+    "rows_out": 0,
+    "status": "success",
+    "notes": "31 DQ checks: nulls, ranges, referential integrity, duplicates, business rules"
+  },
+  {
+    "agent": "generate_data",
+    "run_id": "manual__2026-06-10T13:01:05+00:00",
+    "timestamp": "2026-06-10T13:01:16.723851+00:00",
+    "inputs": [
+      "synthetic_seed=42"
+    ],
+    "outputs": [
+      "/data/orders_data.csv",
+      "/data/customers_data.csv",
+      "/data/products_data.csv",
+      "/data/feedback_data.csv"
+    ],
+    "rows_in": 0,
+    "rows_out": 15875,
+    "status": "success",
+    "notes": "Synthetic Indian e-commerce data generated with fixed seed"
+  },
+  {
+    "agent": "ingest_to_minio",
+    "run_id": "manual__2026-06-10T13:01:05+00:00",
+    "timestamp": "2026-06-10T13:01:19.357108+00:00",
+    "inputs": [
+      "/data/orders_data.csv",
+      "/data/customers_data.csv",
+      "/data/products_data.csv",
+      "/data/feedback_data.csv"
+    ],
+    "outputs": [
+      "s3://data/bronze/orders_data.parquet",
+      "s3://data/bronze/customers_data.parquet",
+      "s3://data/bronze/products_data.parquet",
+      "s3://data/bronze/feedback_data.parquet"
+    ],
+    "rows_in": 15875,
+    "rows_out": 15875,
+    "status": "success",
+    "notes": "CSV \u2192 Parquet conversion, landed in MinIO Bronze zone"
+  },
+  {
+    "agent": "governance_agent",
+    "run_id": "manual__2026-06-10T13:01:05+00:00",
+    "timestamp": "2026-06-10T13:01:23.150957+00:00",
+    "inputs": [
+      "s3://data/bronze/orders_data.parquet",
+      "s3://data/bronze/customers_data.parquet",
+      "s3://data/bronze/products_data.parquet",
+      "s3://data/bronze/feedback_data.parquet"
+    ],
+    "outputs": [
+      "s3://data/silver/orders_enriched.parquet",
+      "s3://data/silver/customers_clean.parquet",
+      "s3://data/silver/products_clean.parquet",
+      "s3://data/silver/feedback_enriched.parquet"
+    ],
+    "rows_in": 15875,
+    "rows_out": 15875,
+    "status": "success",
+    "notes": "Schema enforcement, PII masking, join enrichment, discount/AOV derivation"
+  },
+  {
+    "agent": "quality_agent",
+    "run_id": "manual__2026-06-10T13:01:05+00:00",
+    "timestamp": "2026-06-10T13:01:25.889592+00:00",
+    "inputs": [
+      "s3://data/silver/orders_enriched.parquet",
+      "s3://data/silver/customers_clean.parquet",
+      "s3://data/silver/products_clean.parquet",
+      "s3://data/silver/feedback_enriched.parquet"
+    ],
+    "outputs": [
+      "/data/logs/quality_report.json"
+    ],
+    "rows_in": 15875,
+    "rows_out": 0,
+    "status": "success",
+    "notes": "31 DQ checks: nulls, ranges, referential integrity, duplicates, business rules"
+  },
+  {
+    "agent": "generate_data",
+    "run_id": "manual__2026-06-10T13:15:52+00:00",
+    "timestamp": "2026-06-10T13:16:04.590800+00:00",
+    "inputs": [
+      "synthetic_seed=42"
+    ],
+    "outputs": [
+      "/data/orders_data.csv",
+      "/data/customers_data.csv",
+      "/data/products_data.csv",
+      "/data/feedback_data.csv"
+    ],
+    "rows_in": 0,
+    "rows_out": 15875,
+    "status": "success",
+    "notes": "Synthetic Indian e-commerce data generated with fixed seed"
+  },
+  {
+    "agent": "ingest_to_minio",
+    "run_id": "manual__2026-06-10T13:15:52+00:00",
+    "timestamp": "2026-06-10T13:16:07.375377+00:00",
+    "inputs": [
+      "/data/orders_data.csv",
+      "/data/customers_data.csv",
+      "/data/products_data.csv",
+      "/data/feedback_data.csv"
+    ],
+    "outputs": [
+      "s3://data/bronze/orders_data.parquet",
+      "s3://data/bronze/customers_data.parquet",
+      "s3://data/bronze/products_data.parquet",
+      "s3://data/bronze/feedback_data.parquet"
+    ],
+    "rows_in": 15875,
+    "rows_out": 15875,
+    "status": "success",
+    "notes": "CSV \u2192 Parquet conversion, landed in MinIO Bronze zone"
+  },
+  {
+    "agent": "governance_agent",
+    "run_id": "manual__2026-06-10T13:15:52+00:00",
+    "timestamp": "2026-06-10T13:16:10.841471+00:00",
+    "inputs": [
+      "s3://data/bronze/orders_data.parquet",
+      "s3://data/bronze/customers_data.parquet",
+      "s3://data/bronze/products_data.parquet",
+      "s3://data/bronze/feedback_data.parquet"
+    ],
+    "outputs": [
+      "s3://data/silver/orders_enriched.parquet",
+      "s3://data/silver/customers_clean.parquet",
+      "s3://data/silver/products_clean.parquet",
+      "s3://data/silver/feedback_enriched.parquet"
+    ],
+    "rows_in": 15875,
+    "rows_out": 15875,
+    "status": "success",
+    "notes": "Schema enforcement, PII masking, join enrichment, discount/AOV derivation"
+  },
+  {
+    "agent": "quality_agent",
+    "run_id": "manual__2026-06-10T13:15:52+00:00",
+    "timestamp": "2026-06-10T13:16:13.988863+00:00",
+    "inputs": [
+      "s3://data/silver/orders_enriched.parquet",
+      "s3://data/silver/customers_clean.parquet",
+      "s3://data/silver/products_clean.parquet",
+      "s3://data/silver/feedback_enriched.parquet"
+    ],
+    "outputs": [
+      "/data/logs/quality_report.json"
+    ],
+    "rows_in": 15875,
+    "rows_out": 0,
+    "status": "success",
+    "notes": "31 DQ checks: nulls, ranges, referential integrity, duplicates, business rules"
+  },
+  {
+    "agent": "iceberg_loader",
+    "run_id": "manual__2026-06-10T13:15:52+00:00",
+    "timestamp": "2026-06-10T13:22:18.230635+00:00",
+    "inputs": [
+      "s3://data/bronze/orders_data.parquet",
+      "s3://data/bronze/customers_data.parquet",
+      "s3://data/bronze/products_data.parquet",
+      "s3://data/bronze/feedback_data.parquet"
+    ],
+    "outputs": [
+      "iceberg.landing.orders_data",
+      "iceberg.landing.customers_data",
+      "iceberg.landing.products_data",
+      "iceberg.landing.feedback_data"
+    ],
+    "rows_in": 15875,
+    "rows_out": 15875,
+    "status": "success",
+    "notes": "Trino DDL CREATE TABLE IF NOT EXISTS + batch INSERT 500 rows/batch"
+  },
+  {
+    "agent": "insight_agent",
+    "run_id": "manual__2026-06-10T13:15:52+00:00",
+    "timestamp": "2026-06-10T13:22:33.706531+00:00",
+    "inputs": [
+      "s3://data/silver/orders_enriched.parquet",
+      "s3://data/silver/customers_clean.parquet",
+      "s3://data/silver/products_clean.parquet",
+      "s3://data/silver/feedback_enriched.parquet"
+    ],
+    "outputs": [
+      "s3://data/gold/revenue_summary.parquet",
+      "s3://data/gold/monthly_revenue_trend.parquet",
+      "s3://data/gold/category_performance.parquet",
+      "s3://data/gold/product_performance.parquet",
+      "s3://data/gold/customer_segment_summary.parquet",
+      "s3://data/gold/regional_performance.parquet",
+      "/data/logs/insight_report.json",
+      "/data/logs/insight_summary.md"
+    ],
+    "rows_in": 15875,
+    "rows_out": 0,
+    "status": "success",
+    "notes": "Gold aggregations + OpenAI GPT-4o narrative insights"
+  },
+  {
+    "agent": "generate_data",
+    "run_id": "scheduled__2026-06-09T06:00:00+00:00",
+    "timestamp": "2026-06-10T13:42:04.225920+00:00",
+    "inputs": [
+      "synthetic_seed=42"
+    ],
+    "outputs": [
+      "/data/orders_data.csv",
+      "/data/customers_data.csv",
+      "/data/products_data.csv",
+      "/data/feedback_data.csv"
+    ],
+    "rows_in": 0,
+    "rows_out": 15875,
+    "status": "success",
+    "notes": "Synthetic Indian e-commerce data generated with fixed seed"
+  },
+  {
+    "agent": "ingest_to_minio",
+    "run_id": "scheduled__2026-06-09T06:00:00+00:00",
+    "timestamp": "2026-06-10T13:42:09.394285+00:00",
+    "inputs": [
+      "/data/orders_data.csv",
+      "/data/customers_data.csv",
+      "/data/products_data.csv",
+      "/data/feedback_data.csv"
+    ],
+    "outputs": [
+      "s3://data/bronze/orders_data.parquet",
+      "s3://data/bronze/customers_data.parquet",
+      "s3://data/bronze/products_data.parquet",
+      "s3://data/bronze/feedback_data.parquet"
+    ],
+    "rows_in": 15875,
+    "rows_out": 15875,
+    "status": "success",
+    "notes": "CSV \u2192 Parquet conversion, landed in MinIO Bronze zone"
+  },
+  {
+    "agent": "governance_agent",
+    "run_id": "scheduled__2026-06-09T06:00:00+00:00",
+    "timestamp": "2026-06-10T13:42:17.678219+00:00",
+    "inputs": [
+      "s3://data/bronze/orders_data.parquet",
+      "s3://data/bronze/customers_data.parquet",
+      "s3://data/bronze/products_data.parquet",
+      "s3://data/bronze/feedback_data.parquet"
+    ],
+    "outputs": [
+      "s3://data/silver/orders_enriched.parquet",
+      "s3://data/silver/customers_clean.parquet",
+      "s3://data/silver/products_clean.parquet",
+      "s3://data/silver/feedback_enriched.parquet"
+    ],
+    "rows_in": 15875,
+    "rows_out": 15875,
+    "status": "success",
+    "notes": "Schema enforcement, PII masking, join enrichment, discount/AOV derivation"
+  },
+  {
+    "agent": "quality_agent",
+    "run_id": "scheduled__2026-06-09T06:00:00+00:00",
+    "timestamp": "2026-06-10T13:42:22.410990+00:00",
+    "inputs": [
+      "s3://data/silver/orders_enriched.parquet",
+      "s3://data/silver/customers_clean.parquet",
+      "s3://data/silver/products_clean.parquet",
+      "s3://data/silver/feedback_enriched.parquet"
+    ],
+    "outputs": [
+      "/data/logs/quality_report.json"
+    ],
+    "rows_in": 15875,
+    "rows_out": 0,
+    "status": "success",
+    "notes": "31 DQ checks: nulls, ranges, referential integrity, duplicates, business rules"
+  },
+  {
+    "agent": "generate_data",
+    "run_id": "manual__2026-06-10T14:16:03+00:00",
+    "timestamp": "2026-06-10T14:16:20.850904+00:00",
+    "inputs": [
+      "synthetic_seed=42"
+    ],
+    "outputs": [
+      "/data/orders_data.csv",
+      "/data/customers_data.csv",
+      "/data/products_data.csv",
+      "/data/feedback_data.csv"
+    ],
+    "rows_in": 0,
+    "rows_out": 15875,
+    "status": "success",
+    "notes": "Synthetic Indian e-commerce data generated with fixed seed"
+  },
+  {
+    "agent": "ingest_to_minio",
+    "run_id": "manual__2026-06-10T14:16:03+00:00",
+    "timestamp": "2026-06-10T14:16:24.326600+00:00",
+    "inputs": [
+      "/data/orders_data.csv",
+      "/data/customers_data.csv",
+      "/data/products_data.csv",
+      "/data/feedback_data.csv"
+    ],
+    "outputs": [
+      "s3://data/bronze/orders_data.parquet",
+      "s3://data/bronze/customers_data.parquet",
+      "s3://data/bronze/products_data.parquet",
+      "s3://data/bronze/feedback_data.parquet"
+    ],
+    "rows_in": 15875,
+    "rows_out": 15875,
+    "status": "success",
+    "notes": "CSV \u2192 Parquet conversion, landed in MinIO Bronze zone"
+  },
+  {
+    "agent": "governance_agent",
+    "run_id": "manual__2026-06-10T14:16:03+00:00",
+    "timestamp": "2026-06-10T14:16:28.776360+00:00",
+    "inputs": [
+      "s3://data/bronze/orders_data.parquet",
+      "s3://data/bronze/customers_data.parquet",
+      "s3://data/bronze/products_data.parquet",
+      "s3://data/bronze/feedback_data.parquet"
+    ],
+    "outputs": [
+      "s3://data/silver/orders_enriched.parquet",
+      "s3://data/silver/customers_clean.parquet",
+      "s3://data/silver/products_clean.parquet",
+      "s3://data/silver/feedback_enriched.parquet"
+    ],
+    "rows_in": 15875,
+    "rows_out": 15875,
+    "status": "success",
+    "notes": "Schema enforcement, PII masking, join enrichment, discount/AOV derivation"
+  },
+  {
+    "agent": "quality_agent",
+    "run_id": "manual__2026-06-10T14:16:03+00:00",
+    "timestamp": "2026-06-10T14:16:32.442026+00:00",
+    "inputs": [
+      "s3://data/silver/orders_enriched.parquet",
+      "s3://data/silver/customers_clean.parquet",
+      "s3://data/silver/products_clean.parquet",
+      "s3://data/silver/feedback_enriched.parquet"
+    ],
+    "outputs": [
+      "/data/logs/quality_report.json"
+    ],
+    "rows_in": 15875,
+    "rows_out": 0,
+    "status": "success",
+    "notes": "31 DQ checks: nulls, ranges, referential integrity, duplicates, business rules"
+  },
+  {
+    "agent": "generate_data",
+    "run_id": "manual__2026-06-10T14:28:53+00:00",
+    "timestamp": "2026-06-10T14:29:06.541486+00:00",
+    "inputs": [
+      "synthetic_seed=42"
+    ],
+    "outputs": [
+      "/data/orders_data.csv",
+      "/data/customers_data.csv",
+      "/data/products_data.csv",
+      "/data/feedback_data.csv"
+    ],
+    "rows_in": 0,
+    "rows_out": 15875,
+    "status": "success",
+    "notes": "Synthetic Indian e-commerce data generated with fixed seed"
+  },
+  {
+    "agent": "ingest_to_minio",
+    "run_id": "manual__2026-06-10T14:28:53+00:00",
+    "timestamp": "2026-06-10T14:29:11.815162+00:00",
+    "inputs": [
+      "/data/orders_data.csv",
+      "/data/customers_data.csv",
+      "/data/products_data.csv",
+      "/data/feedback_data.csv"
+    ],
+    "outputs": [
+      "s3://data/bronze/orders_data.parquet",
+      "s3://data/bronze/customers_data.parquet",
+      "s3://data/bronze/products_data.parquet",
+      "s3://data/bronze/feedback_data.parquet"
+    ],
+    "rows_in": 15875,
+    "rows_out": 15875,
+    "status": "success",
+    "notes": "CSV \u2192 Parquet conversion, landed in MinIO Bronze zone"
+  },
+  {
+    "agent": "governance_agent",
+    "run_id": "manual__2026-06-10T14:28:53+00:00",
+    "timestamp": "2026-06-10T14:29:21.849304+00:00",
+    "inputs": [
+      "s3://data/bronze/orders_data.parquet",
+      "s3://data/bronze/customers_data.parquet",
+      "s3://data/bronze/products_data.parquet",
+      "s3://data/bronze/feedback_data.parquet"
+    ],
+    "outputs": [
+      "s3://data/silver/orders_enriched.parquet",
+      "s3://data/silver/customers_clean.parquet",
+      "s3://data/silver/products_clean.parquet",
+      "s3://data/silver/feedback_enriched.parquet"
+    ],
+    "rows_in": 15875,
+    "rows_out": 15875,
+    "status": "success",
+    "notes": "Schema enforcement, PII masking, join enrichment, discount/AOV derivation"
+  },
+  {
+    "agent": "quality_agent",
+    "run_id": "manual__2026-06-10T14:28:53+00:00",
+    "timestamp": "2026-06-10T14:29:26.084835+00:00",
+    "inputs": [
+      "s3://data/silver/orders_enriched.parquet",
+      "s3://data/silver/customers_clean.parquet",
+      "s3://data/silver/products_clean.parquet",
+      "s3://data/silver/feedback_enriched.parquet"
+    ],
+    "outputs": [
+      "/data/logs/quality_report.json"
+    ],
+    "rows_in": 15875,
+    "rows_out": 0,
+    "status": "success",
+    "notes": "31 DQ checks: nulls, ranges, referential integrity, duplicates, business rules"
+  },
+  {
+    "agent": "iceberg_loader",
+    "run_id": "manual__2026-06-10T14:28:53+00:00",
+    "timestamp": "2026-06-10T14:34:26.922064+00:00",
+    "inputs": [
+      "s3://data/bronze/orders_data.parquet",
+      "s3://data/bronze/customers_data.parquet",
+      "s3://data/bronze/products_data.parquet",
+      "s3://data/bronze/feedback_data.parquet"
+    ],
+    "outputs": [
+      "iceberg.landing.orders_data",
+      "iceberg.landing.customers_data",
+      "iceberg.landing.products_data",
+      "iceberg.landing.feedback_data"
+    ],
+    "rows_in": 15875,
+    "rows_out": 15875,
+    "status": "success",
+    "notes": "Trino DDL CREATE TABLE IF NOT EXISTS + batch INSERT 500 rows/batch"
+  },
+  {
+    "agent": "insight_agent",
+    "run_id": "manual__2026-06-10T14:28:53+00:00",
+    "timestamp": "2026-06-10T14:34:41.474808+00:00",
+    "inputs": [
+      "s3://data/silver/orders_enriched.parquet",
+      "s3://data/silver/customers_clean.parquet",
+      "s3://data/silver/products_clean.parquet",
+      "s3://data/silver/feedback_enriched.parquet"
+    ],
+    "outputs": [
+      "s3://data/gold/revenue_summary.parquet",
+      "s3://data/gold/monthly_revenue_trend.parquet",
+      "s3://data/gold/category_performance.parquet",
+      "s3://data/gold/product_performance.parquet",
+      "s3://data/gold/customer_segment_summary.parquet",
+      "s3://data/gold/regional_performance.parquet",
+      "/data/logs/insight_report.json",
+      "/data/logs/insight_summary.md"
+    ],
+    "rows_in": 15875,
+    "rows_out": 0,
+    "status": "success",
+    "notes": "Gold aggregations + OpenAI GPT-4o narrative insights"
+  }
+]
